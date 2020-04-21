@@ -91,6 +91,7 @@ subroutine readinputs(nrens,nt)
 
       read(10,*)minpar              ;    print '(a,f10.3)',    'Lower bound on all paramters         :',minpar
       read(10,*)rtmax               ;    print '(a,f10.3)',    'Maximum value of Rt during intervent :',rtmax
+      qminf=0.0
 
       read(10,'(a)')ca      
       if (ca /= '#5') then

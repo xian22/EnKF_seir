@@ -12,4 +12,5 @@ module mod_parameters
    real :: time
    real :: minpar
    real :: rtmax
+   real :: Qminf
 end module 
