@@ -1,6 +1,6 @@
 module m_enkfprep
 contains
-subroutine enkfprep(ens,enspar,nrens,nt)
+subroutine enkfprep(ens,enspar)
    use mod_dimensions
    use mod_states
    use mod_params
@@ -10,8 +10,6 @@ subroutine enkfprep(ens,enspar,nrens,nt)
    use m_pseudo1D
    use m_fixsample1D
    implicit none
-   integer, intent(in) :: nt
-   integer, intent(in) :: nrens
    type(states), intent(in) :: ens(0:nt,nrens)
    type(params), intent(in) :: enspar(nrens)
    type(params)  avepar

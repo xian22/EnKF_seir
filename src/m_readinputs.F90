@@ -1,16 +1,16 @@
 module m_readinputs
 contains
-subroutine readinputs(nrens,nt)
+subroutine readinputs()
+   use mod_dimensions
    use mod_params
    use mod_parameters 
    use m_enkfini 
    use m_getday
    implicit none
-   integer, intent(out) :: nrens
-   integer, intent(out) :: nt
    logical ex
    character(len=2) ca
    integer id,im,iy,k,day
+   real stdR,fgR
 
    inquire(file='infile.in',exist=ex)
    if (.not.ex) then
@@ -68,7 +68,7 @@ subroutine readinputs(nrens,nt)
       endif
 
 ! MODEL PARAMETERS (Set first guess (ensemble mean) of parameters (decleared in mod_parameters.F90) and their stddev 
-      read(10,*)p%R(1) , parstd%R(1) ; print '(a,2f10.3)', 'R until 1st intervention and std dev :',p%R(1)   ,parstd%R(1)   
+      read(10,*)fgR    , stdR        ; print '(a,2f10.3)', 'R until 1st intervention and std dev :',p%R(1)   ,parstd%R(1)   
       read(10,*)p%R(2) , parstd%R(2) ; print '(a,2f10.3)', 'R 1st-2nd intervention   and std dev :',p%R(2)   ,parstd%R(2)   
       read(10,*)p%R(3) , parstd%R(3) ; print '(a,2f10.3)', 'R 2nd-3rd intervention   and std dev :',p%R(3)   ,parstd%R(3)   
       read(10,*)p%I0   , parstd%I0   ; print '(a,2f10.3)', 'Initial infected I0      and std dev :',p%I0     ,parstd%I0   
@@ -81,7 +81,9 @@ subroutine readinputs(nrens,nt)
       read(10,*)p%CFR  , parstd%CFR  ; print '(a,2f10.3)', 'Critical fatality ratio  and std dev :',p%CFR    ,parstd%CFR  
       read(10,*)p%p_sev, parstd%p_sev; print '(a,2f10.3)', 'Fraction of severe cases and std dev :',p%p_sev  ,parstd%p_sev
 
-      pfg=p ! store first guess of parameters
+      p%R(:)=fgR     ! R prior
+      pfg=p          ! store first guess of parameters
+      parstd%R(:) = stdR 
 
       read(10,'(a)')ca      
       if (ca /= '#4') then

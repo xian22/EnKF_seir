@@ -22,7 +22,7 @@ git clone git@github.com:geirev/EnKF_sampling.git
 
 #1b. Best installation option
 # -  Make a personal github account unless you already have one.
-# Fork the three repositorys listed above replacing the userid with your github account id.
+# Fork the three repositorys listed above.
 # Next clone the repositories and set upstream to the original repositories
 git clone git@github.com:<userid>/EnKF_seir.git
 cd EnKF_seir; git remote add upstream https://github.com/geirev/EnKF_seir

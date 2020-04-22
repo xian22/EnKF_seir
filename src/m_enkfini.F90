@@ -32,11 +32,10 @@ use m_random
    integer nrobsh,nrobsd
 
 contains
-subroutine enkfini(nrens,nt,time)
+subroutine enkfini(time)
+   use mod_dimensions
    use m_getday
    implicit none
-   integer, intent (in) :: nrens
-   integer, intent (in) :: nt
    real,    intent (in) :: time
    real dt
    integer i,j,k,m
