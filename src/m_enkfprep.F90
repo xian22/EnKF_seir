@@ -16,7 +16,7 @@ subroutine enkfprep(ens,enspar)
    real, allocatable :: obspertd(:,:)
    real, allocatable :: obsperth(:,:)
    integer i,m,j
-   logical, save :: lprt =.true.
+   logical, save :: lprt =.false.
  
    print *
    if (lprt) then

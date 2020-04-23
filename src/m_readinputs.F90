@@ -1,4 +1,5 @@
 module m_readinputs
+logical lrtime
 contains
 subroutine readinputs()
    use mod_dimensions
@@ -10,7 +11,8 @@ subroutine readinputs()
    logical ex
    character(len=2) ca
    integer id,im,iy,k,day
-   real stdR,fgR
+   integer ir,i
+   real stdR(nrint),fgR(nrint),dt,t
 
    inquire(file='infile.in',exist=ex)
    if (.not.ex) then
@@ -68,9 +70,10 @@ subroutine readinputs()
       endif
 
 ! MODEL PARAMETERS (Set first guess (ensemble mean) of parameters (decleared in mod_parameters.F90) and their stddev 
-      read(10,*)fgR    , stdR        ; print '(a,2f10.3)', 'R until 1st intervention and std dev :',p%R(1)   ,parstd%R(1)   
-      read(10,*)p%R(2) , parstd%R(2) ; print '(a,2f10.3)', 'R 1st-2nd intervention   and std dev :',p%R(2)   ,parstd%R(2)   
-      read(10,*)p%R(3) , parstd%R(3) ; print '(a,2f10.3)', 'R 2nd-3rd intervention   and std dev :',p%R(3)   ,parstd%R(3)   
+      read(10,*)lrtime               ; print '(a,l1)',     'picewise R(t) or picewise constant   :',lrtime
+      read(10,*)fgR(1) , stdR(1)     ; print '(a,2f10.3)', 'prior R until 1st interv and std dev :',fgR(1)   ,stdR(1)   
+      read(10,*)fgR(2) , stdR(2)     ; print '(a,2f10.3)', 'prior R 1st-2nd interv   and std dev :',fgR(2)   ,stdR(2)   
+      read(10,*)fgR(3) , stdR(3)     ; print '(a,2f10.3)', 'prior R 2nd-3rd interv   and std dev :',fgR(3)   ,stdR(3)   
       read(10,*)p%I0   , parstd%I0   ; print '(a,2f10.3)', 'Initial infected I0      and std dev :',p%I0     ,parstd%I0   
       read(10,*)p%Tinc , parstd%Tinc ; print '(a,2f10.3)', 'Incubation time          and std dev :',p%Tinc   ,parstd%Tinc 
       read(10,*)p%Tinf , parstd%Tinf ; print '(a,2f10.3)', 'Infection time           and std dev :',p%Tinf   ,parstd%Tinf 
@@ -81,9 +84,21 @@ subroutine readinputs()
       read(10,*)p%CFR  , parstd%CFR  ; print '(a,2f10.3)', 'Critical fatality ratio  and std dev :',p%CFR    ,parstd%CFR  
       read(10,*)p%p_sev, parstd%p_sev; print '(a,2f10.3)', 'Fraction of severe cases and std dev :',p%p_sev  ,parstd%p_sev
 
-      p%R(:)=fgR     ! R prior
+      do i=0,nt
+         dt= time/real(nt-1)
+         t= 0 + real(i)*dt
+         if (t <= Tinterv(1)) then
+            ir=1
+         elseif (Tinterv(1) < t .and. t <= Tinterv(2) ) then
+            ir=2
+         elseif (t > Tinterv(2)) then
+            ir=3
+         endif
+         p%R(i)=fgR(ir)     
+         parstd%R(i) = stdR(ir) 
+      enddo
+
       pfg=p          ! store first guess of parameters
-      parstd%R(:) = stdR 
 
       read(10,'(a)')ca      
       if (ca /= '#4') then

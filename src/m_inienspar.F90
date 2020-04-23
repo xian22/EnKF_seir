@@ -13,9 +13,17 @@ subroutine inienspar(enspar)
    integer j
 
    call random(enspar%I0   ,nrens)
-   do j=1,nrens
-      call pseudo1D(enspar(j)%R,rdim+1,1,10.0,1.0,nt+50)
-   enddo
+   if (lrtime) then
+      do j=1,nrens
+         call pseudo1D(enspar(j)%R,rdim+1,1,10.0,1.0,nt+50)
+      enddo
+   else
+      call random(enspar%R(0) ,nrens)
+      do j=1,nrens
+         enspar(j)%R(1:rdim)=enspar(j)%R(0)
+      enddo
+   endif
+
    call random(enspar%Tinf ,nrens)
    call random(enspar%Tinc ,nrens)
    call random(enspar%Trecm,nrens)

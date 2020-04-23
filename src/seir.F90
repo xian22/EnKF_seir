@@ -31,18 +31,18 @@ program seir
    call agegroups                              ! Define agegroups and population numbers
    call Rmatrix                                ! Define R infection rates between agegroups used in phase 3
    call pfactors                               ! Define fraction of mild, severe, or fatal, for each agegroup
-   call enkfini(time)                 ! Reading data from corona.dat
-   call inienspar(enspar)   ! Initialize ensemble of parameters
+   call enkfini(time)                          ! Reading data from corona.dat
+   call inienspar(enspar)                      ! Initialize ensemble of parameters
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Prior ensemble prediction
    print '(a)','Computing prior ensemble prediction'
-   call iniens(ens,enspar)                   ! Initialize ensemble of models
+   call iniens(ens,enspar)                     ! Initialize ensemble of models
    do j=1,nrens
-      call solve(ens,enspar,j)               ! solve ODEs for member j
+      call solve(ens,enspar,j)                 ! solve ODEs for member j
    enddo
    print '(a)','Dumping tecplot files.'
-   call tecplot(ens,enspar,0) ! Dump prior solution to files
+   call tecplot(ens,enspar,0)                  ! Dump prior solution to files
    if (.not.lenkf) stop                        ! If not doing assimilation stop here
 
 
@@ -51,13 +51,13 @@ program seir
    do i=1,nesmda
       print '(a,2I3)','ESMDA step:',i,nesmda
 ! Analysis step
-      call enkfprep(ens,enspar) ! Compute S and D matrices
+      call enkfprep(ens,enspar)                ! Compute S and D matrices
       call analysis(enspar, R, E, S, D, innovation, nrpar, nrens, nrobs, .true., truncation, mode_analysis, &
                     lrandrot, lupdate_randrot, lsymsqrt, inflate, infmult, ne)
-      call enkfpost(ens,enspar) ! Check parameters
+      call enkfpost(ens,enspar)                ! Check parameters
   
 ! Posterior ensemble prediction
-      call iniens(ens,enspar)                ! Initialize ensemble of models from updated parameters
+      call iniens(ens,enspar)                  ! Initialize ensemble of models from updated parameters
       do j=1,nrens
          call solve(ens,enspar,j)
       enddo
@@ -88,7 +88,7 @@ subroutine f(neq, t, y, ydot)
    type(states) ydot
 
    real R(na,na)
-   real :: qminf=0.0
+   real :: qminf=0.0 ! if set to 0.0 < qminf <= 1.0 then qminf fraction of Qm contributes to spreading virus
    real dt
    integer i,ir
 
