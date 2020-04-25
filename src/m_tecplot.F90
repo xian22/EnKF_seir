@@ -225,7 +225,7 @@ subroutine tecplot(ens,enspar,pri)
    write(10,*)'TITLE = "Rensemble'//tag//'"'
       write(10,'(a)')'VARIABLES = "time" "ave" "std" '
       write(10,'(20(a,i4,a))')(' "',i,'"',i=1,min(nrens,1000))
-      write(10,*)'ZONE T="Rens_'//tag//'"  F=POINT, I=',nt+1,', J=1, K=1'
+      write(10,*)'ZONE T="Rens_'//tag//'"  F=POINT, I=',min(nt+1,rdim+1),', J=1, K=1'
       aveR=0.0
       stdR=0.0
       do j=1,nrens
@@ -236,7 +236,7 @@ subroutine tecplot(ens,enspar,pri)
       enddo
       aveR=aveR/real(nrens)
       stdR=stdR/real(nrens) - aveR**2
-      do i=0,nt
+      do i=0,min(rdim,nt)
          write(10,'(2000f8.3)')real(i)*dt,aveR(i),stdR(i),enspar(1:min(nrens,1000))%R(i)
       enddo
    close(10)

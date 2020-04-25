@@ -14,8 +14,9 @@ subroutine inienspar(enspar)
 
    call random(enspar%I0   ,nrens)
    if (lrtime) then
+      print *,'lrtime=',lrtime
       do j=1,nrens
-         call pseudo1D(enspar(j)%R,rdim+1,1,10.0,1.0,nt+50)
+         call pseudo1D(enspar(j)%R,rdim+1,1,rdcorr,1.0,rdim+50)
       enddo
    else
       call random(enspar%R(0) ,nrens)

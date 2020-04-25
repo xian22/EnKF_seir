@@ -94,7 +94,7 @@ subroutine f(neq, t, y, ydot)
 
 
    dt= time/real(nt-1)
-   i= nint(t/dt)
+   i= min(nint(t/dt), rdim)
 
    if (t <= Tinterv(1)) then
       ir=1

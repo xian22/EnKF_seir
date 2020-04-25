@@ -107,7 +107,7 @@ subroutine enkfini(time)
    print '(a)','List of observations:'
    print '(a)','  number   gridp obstime obstype  obsval  stddev'
    do m=1,nrobs
-      print '(3i8,a8,2f8.3)',m,iobs(m),tobs(m),cobs(m),dobs(m),min(maxobserr,max(relobserr*dobs(m),minobserr)) 
+      print '(3i8,a8,2f10.3)',m,iobs(m),tobs(m),cobs(m),dobs(m),min(maxobserr,max(relobserr*dobs(m),minobserr)) 
    enddo
    print *
 
