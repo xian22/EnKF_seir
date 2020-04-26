@@ -17,7 +17,6 @@ subroutine saveresult(fname,varname,aved,stdd,ensd,tag,dt)
       write(10,'(5a)')'TITLE = "'//varname//'_'//tag//'"'
       write(10,'(a)')'VARIABLES = "time" "ave" "std" '
       write(10,'(20(a,i4,a))')(' "',i,'"',i=1,min(nrens,1000))
-!      write(10,'(5a,i5,a)')'ZONE T="'//varname//'_'//tag//'"  F=POINT, I=',nt+1,', J=1, K=1'
       write(10,*)'ZONE T="'//varname//'_'//tag//'"  F=POINT, I=',nt+1,', J=1, K=1'
       if (stdd(0) < 1.0E-30) stdd(0)=0.0
       do i=0,nt
@@ -130,18 +129,22 @@ subroutine tecplot(ens,enspar,pri)
    enddo
 
    do i=0,nt
+
       aved(i)=0.0
-      stdd(i)=0.0
       do j=1,nrens
          aved(i)=aved(i) + ensd(i,j)
       enddo
       aved(i)=aved(i)*(1.0/real(nrens))
+
+      stdd(i)=0.0
       do j=1,nrens
          stdd(i)=stdd(i) + (ensd(i,j)-aved(i))*(ensd(i,j)-aved(i))
       enddo
       stdd(i)=stdd(i)*(1.0/real(nrens-1))
       stdd(i)=sqrt(stdd(i))
+
    enddo
+
 
    call saveresult('susc' ,'Susceptible'  ,aved(:)%S,stdd(:)%S,ensd(:,:)%S,tag,dt)
    call saveresult('expos','Exposed'      ,aved(:)%E,stdd(:)%E,ensd(:,:)%E,tag,dt)
@@ -221,23 +224,28 @@ subroutine tecplot(ens,enspar,pri)
       enddo 
    close(10)
    
-   open(10,file='Rens'//tag//'.dat')
-   write(10,*)'TITLE = "Rensemble'//tag//'"'
+   aveR=0.0
+   stdR=0.0
+   do i=0,nt
+      do j=1,nrens
+         aveR(i)=aveR(i) + enspar(j)%R(i)
+      enddo
+      aveR(i)=aveR(i)/real(nrens)
+
+      do j=1,nrens
+         stdR(i)=stdR(i) + (enspar(j)%R(i)-aveR(i))**2
+      enddo
+      stdR(i)=stdR(i)/real(nrens-1) 
+      stdR(i)=sqrt(stdR(i))
+   enddo
+
+   open(10,file='Rens_'//tag//'.dat')
+   write(10,*)'TITLE = "Rens_'//tag//'"'
       write(10,'(a)')'VARIABLES = "time" "ave" "std" '
       write(10,'(20(a,i4,a))')(' "',i,'"',i=1,min(nrens,1000))
       write(10,*)'ZONE T="Rens_'//tag//'"  F=POINT, I=',min(nt+1,rdim+1),', J=1, K=1'
-      aveR=0.0
-      stdR=0.0
-      do j=1,nrens
-      do i=0,nt
-         aveR(i)=aveR(i) + enspar(j)%R(i)
-         stdR(i)=stdR(i) + (enspar(j)%R(i))**2
-      enddo
-      enddo
-      aveR=aveR/real(nrens)
-      stdR=stdR/real(nrens) - aveR**2
       do i=0,min(rdim,nt)
-         write(10,'(2000f8.3)')real(i)*dt,aveR(i),stdR(i),enspar(1:min(nrens,1000))%R(i)
+         write(10,'(2000f10.5)')real(i)*dt,aveR(i),stdR(i),enspar(1:min(nrens,1000))%R(i)
       enddo
    close(10)
   
