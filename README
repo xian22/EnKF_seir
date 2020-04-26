@@ -12,6 +12,11 @@ The ESMDA is then used to update the ensemble of model parameters.
 Thereafter the posterior ensemble is integrated a final time to produce the posterior
 prediction.
 
+See the files:
+README_SETUP for setting up a simulation with the code.
+README_GIT for git instructions.
+REALEASE_NOTES for information about updates in the code.
+
 
 INSTALLATION:
 
