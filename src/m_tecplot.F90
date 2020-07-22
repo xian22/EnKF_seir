@@ -84,7 +84,9 @@ subroutine tecplot(ens,enspar,pri)
 !                          & ('"S',i,'" ',i=1,na),  &
 !                          & ('"E',i,'" ',i=1,na),  &
 !                          & ('"I',i,'" ',i=1,na),  &
-!                          &' "Qm" "Qs" "Qf" "Hs" "Hf" "C" "Rm" "Rs" "D"'
+!                          &' "Qm" "Qs" "QfH" "QfR" &
+!                          & "Hs" "HfH" "HfR" "CH"  &
+!                          & "CR" "Rm" "Rs" "DH" "DR"'
 !      write(10,'(a,i5,a,i5,a)')' ZONE T="ave"  F=POINT, I=',nt+1,', J=1, K=1'
 !      do i=0,nt
 !         t=0+real(i)*dt
@@ -112,20 +114,24 @@ subroutine tecplot(ens,enspar,pri)
          ensd(i,j)%S=sum(ens(i,j)%S(:))
          ensd(i,j)%E=sum(ens(i,j)%E(:))
          ensd(i,j)%I=sum(ens(i,j)%I(:))
-         ensd(i,j)%H=ens(i,j)%Hs + ens(i,j)%Hf
+         ensd(i,j)%H=ens(i,j)%Hs + ens(i,j)%HfH + ens(i,j)%HfR
          ensd(i,j)%R=ens(i,j)%Rm + ens(i,j)%Rs
-         ensd(i,j)%D=ens(i,j)%D
+         ensd(i,j)%DH=ens(i,j)%DH
+         ensd(i,j)%DR=ens(i,j)%DR
          ensd(i,j)%C=&  !!!!!!! Dont include exposed in cases. ensd(i,j)%E  &
-                    + ensd(i,j)%I  &
-                     + ens(i,j)%Qm &
-                     + ens(i,j)%Qs &
-                     + ens(i,j)%Qf &
-                     + ens(i,j)%Hs &
-                     + ens(i,j)%Hf &
-                     + ens(i,j)%Rm &
-                     + ens(i,j)%Rs &
-                     + ens(i,j)%D 
-         ensd(i,j)%A=ensd(i,j)%C + ensd(i,j)%E - ensd(i,j)%R - ensd(i,j)%D
+                    + ensd(i,j)%I   &
+                     + ens(i,j)%Qm  &
+                     + ens(i,j)%Qs  &
+                     + ens(i,j)%QfH &
+                     + ens(i,j)%QfR &
+                     + ens(i,j)%Hs  &
+                     + ens(i,j)%HfH &
+                     + ens(i,j)%HfR &
+                     + ens(i,j)%Rm  &
+                     + ens(i,j)%Rs  &
+                     + ens(i,j)%DH  &
+                     + ens(i,j)%DR 
+         ensd(i,j)%A=ensd(i,j)%C + ensd(i,j)%E - ensd(i,j)%R - ensd(i,j)%DH - ensd(i,j)%DR
          ensd(i,j)=N*ensd(i,j)
       enddo
    enddo
@@ -153,8 +159,9 @@ subroutine tecplot(ens,enspar,pri)
    call saveresult('infec','Infecteus'    ,aved(:)%I,stdd(:)%I,ensd(:,:)%I,tag,dt)
    call saveresult('recov','Recovered'    ,aved(:)%R,stdd(:)%R,ensd(:,:)%R,tag,dt)
    call saveresult('hosp' ,'Hospitalized' ,aved(:)%H,stdd(:)%H,ensd(:,:)%H,tag,dt)
-   call saveresult('dead' ,'Dead'         ,aved(:)%D,stdd(:)%D,ensd(:,:)%D,tag,dt)
-   call saveresult('case' ,'Cases'        ,aved(:)%C,stdd(:)%C,ensd(:,:)%C,tag,dt)
+   call saveresult('deadH' ,'DeadH'       ,aved(:)%DH,stdd(:)%DH,ensd(:,:)%DH,tag,dt)
+   call saveresult('deadR' ,'DeadR'       ,aved(:)%DR,stdd(:)%DR,ensd(:,:)%DR,tag,dt)
+   call saveresult('case'  ,'Cases'      ,aved(:)%C,stdd(:)%C,ensd(:,:)%C,tag,dt)
    call saveresult('active' ,'Active'     ,aved(:)%A,stdd(:)%A,ensd(:,:)%A,tag,dt)
 
  

@@ -88,36 +88,44 @@ subroutine enkfprep(ens,enspar)
 ! ensemble average of state for observation m
       select case (cobs(m))
       case('d')
-         D(m,:) = D(m,:)-N*ens(iobs(m),:)%D
-         S(m,:) = N*( ens(iobs(m),:)%D - aveens%D )
+         D(m,:) = D(m,:)-N*ens(iobs(m),:)%DH
+         S(m,:) = N*( ens(iobs(m),:)%DH - aveens%DH )
       case('h')
-         D(m,:) = D(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%Hf)
+         D(m,:) = D(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH)
          S(m,:) = N*( ens(iobs(m),:)%Hs - aveens%Hs &
-                &    +ens(iobs(m),:)%Hf - aveens%Hf )
+                &    +ens(iobs(m),:)%HfH - aveens%HfH )
       case('c')
          do j=1,nrens
             D(m,j) = D(m,j)- &
-                        cfrac*N*(sum(ens(iobs(m),j)%I(1:na)) &
+                        cfrac*N*(sum(ens(iobs(m),j)%I(1:na/2)) &
                                     +ens(iobs(m),j)%Qm       &
                                     +ens(iobs(m),j)%Qs       &
-                                    +ens(iobs(m),j)%Qf       &
+                                    +ens(iobs(m),j)%QfH      &
+                                    +ens(iobs(m),j)%QfR      &
                                     +ens(iobs(m),j)%Hs       &
-                                    +ens(iobs(m),j)%Hf       &
-                                    +ens(iobs(m),j)%C        &
+                                    +ens(iobs(m),j)%HfH      &
+                                    +ens(iobs(m),j)%HfR      &
+                                    +ens(iobs(m),j)%CH       &
+                                    +ens(iobs(m),j)%CR       &
                                     +ens(iobs(m),j)%Rm       &
                                     +ens(iobs(m),j)%Rs       &
-                                    +ens(iobs(m),j)%D        )
+                                    +ens(iobs(m),j)%DR       &
+                                    +ens(iobs(m),j)%DH        )
 
             S(m,j) =         N*( sum(ens(iobs(m),j)%I(:)) - sum(aveens%I(:))  &
                                     +ens(iobs(m),j)%Qm         -aveens%Qm     &
                                     +ens(iobs(m),j)%Qs         -aveens%Qs     &
-                                    +ens(iobs(m),j)%Qf         -aveens%Qf     &
+                                    +ens(iobs(m),j)%QfH        -aveens%QfH    &
+                                    +ens(iobs(m),j)%QfR        -aveens%QfR    &
                                     +ens(iobs(m),j)%Hs         -aveens%Hs     &
-                                    +ens(iobs(m),j)%Hf         -aveens%Hf     &
-                                    +ens(iobs(m),j)%C          -aveens%C      &
+                                    +ens(iobs(m),j)%HfH        -aveens%HfH    &
+                                    +ens(iobs(m),j)%HfR        -aveens%HfR    &
+                                    +ens(iobs(m),j)%CH         -aveens%CH     &
+                                    +ens(iobs(m),j)%CR         -aveens%CR     &
                                     +ens(iobs(m),j)%Rm         -aveens%Rm     &
                                     +ens(iobs(m),j)%Rs         -aveens%Rs     &
-                                    +ens(iobs(m),j)%D          -aveens%D      )
+                                    +ens(iobs(m),j)%DR         -aveens%DR     &
+                                    +ens(iobs(m),j)%DH         -aveens%DH      )
                enddo
       case default
          stop 'Measurement type not found'

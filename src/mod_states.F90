@@ -10,13 +10,17 @@ module mod_states
       real I(na)        ! Infectious age groups
       real Qm           ! Quarantened mild sickness
       real Qs           ! Quarantened severe sickness (will be hospitalized)
-      real Qf           ! Quarantened fatal sickness (will die)
+      real QfH          ! Quarantened fatal sickness (will die) H
+      real QfR          ! Quarantened fatal sickness (will die) R
       real Hs           ! Hospitalized with severe sickness
-      real Hf           ! Hospitalized with fatal sickness
-      real C            ! In Care home with fatal sickness
+      real HfH          ! Hospitalized with fatal sickness H
+      real HfR          ! Hospitalized with fatal sickness R
+      real CH           ! In Care home with fatal sickness H
+      real CR           ! In Care home with fatal sickness R
       real Rm           ! Recovered from mild sickness
       real Rs           ! Recovered from severe sickness (from hospital)
-      real D            ! Dead
+      real DH           ! Dead H
+      real DR           ! Dead R
    end type states
 
 
@@ -58,13 +62,17 @@ contains
                  + sum(A%I) &
                  + A%Qm     &
                  + A%Qs     &
-                 + A%Qf     &
+                 + A%QfH    &
+                 + A%QfR    &
                  + A%Hs     &
-                 + A%Hf     &
-                 + A%C      &
+                 + A%HfH    &
+                 + A%HfR    &
+                 + A%CH     &
+                 + A%CR     &
                  + A%Rm     &
                  + A%Rs     &
-                 + A%D 
+                 + A%DH     &
+                 + A%DR 
    end function sum_states
 
    function sqrt_states(A)
@@ -76,13 +84,17 @@ contains
       sqrt_states%I       = sqrt(A%I+eps)
       sqrt_states%Qm      = sqrt(A%Qm+eps)
       sqrt_states%Qs      = sqrt(A%Qs+eps)
-      sqrt_states%Qf      = sqrt(A%Qf+eps)
+      sqrt_states%QfH     = sqrt(A%QfH+eps)
+      sqrt_states%QfR     = sqrt(A%QfR+eps)
       sqrt_states%Hs      = sqrt(A%Hs+eps)
-      sqrt_states%Hf      = sqrt(A%Hf+eps)
-      sqrt_states%C       = sqrt(A%C+eps)
+      sqrt_states%HfH     = sqrt(A%HfH+eps)
+      sqrt_states%HfR     = sqrt(A%HfR+eps)
+      sqrt_states%CH      = sqrt(A%CH+eps)
+      sqrt_states%CR      = sqrt(A%CR+eps)
       sqrt_states%Rm      = sqrt(A%Rm+eps)
       sqrt_states%Rs      = sqrt(A%Rs+eps)
-      sqrt_states%D       = sqrt(A%D+eps)
+      sqrt_states%DH      = sqrt(A%DH+eps)
+      sqrt_states%DR      = sqrt(A%DR+eps)
    end function sqrt_states
 
    function add_states(A,B)
@@ -94,13 +106,17 @@ contains
       add_states%I       = A%I  + B%I
       add_states%Qm      = A%Qm + B%Qm
       add_states%Qs      = A%Qs + B%Qs
-      add_states%Qf      = A%Qf + B%Qf
+      add_states%QfH     = A%QfH + B%QfH
+      add_states%QfR     = A%QfR + B%QfR
       add_states%Hs      = A%Hs + B%Hs
-      add_states%Hf      = A%Hf + B%Hf
-      add_states%C       = A%C  + B%C 
+      add_states%HfH     = A%HfH + B%HfH
+      add_states%HfR     = A%HfR + B%HfR
+      add_states%CH      = A%CH  + B%CH 
+      add_states%CR      = A%CR  + B%CR 
       add_states%Rm      = A%Rm + B%Rm
       add_states%Rs      = A%Rs + B%Rs
-      add_states%D       = A%D  + B%D
+      add_states%DH      = A%DH  + B%DH
+      add_states%DR      = A%DR  + B%DR
    end function add_states
 
    function subtract_states(A,B)
@@ -112,13 +128,17 @@ contains
       subtract_states%I       = A%I  - B%I
       subtract_states%Qm      = A%Qm - B%Qm
       subtract_states%Qs      = A%Qs - B%Qs
-      subtract_states%Qf      = A%Qf - B%Qf
+      subtract_states%QfH     = A%QfH - B%QfH
+      subtract_states%QfR     = A%QfR - B%QfR
       subtract_states%Hs      = A%Hs - B%Hs
-      subtract_states%Hf      = A%Hf - B%Hf
-      subtract_states%C       = A%C  - B%C 
+      subtract_states%HfH     = A%HfH - B%HfH
+      subtract_states%HfR     = A%HfR - B%HfR
+      subtract_states%CH      = A%CH  - B%CH
+      subtract_states%CR      = A%CR  - B%CR 
       subtract_states%Rm      = A%Rm - B%Rm
       subtract_states%Rs      = A%Rs - B%Rs
-      subtract_states%D       = A%D  - B%D
+      subtract_states%DH      = A%DH  - B%DH
+      subtract_states%DR      = A%DR  - B%DR
    end function subtract_states
 
    function states_real_mult(A,B)
@@ -130,13 +150,17 @@ contains
       states_real_mult%I       = B*A%I 
       states_real_mult%Qm      = B*A%Qm
       states_real_mult%Qs      = B*A%Qs
-      states_real_mult%Qf      = B*A%Qf
+      states_real_mult%QfH     = B*A%QfH
+      states_real_mult%QfR     = B*A%QfR
       states_real_mult%Hs      = B*A%Hs
-      states_real_mult%Hf      = B*A%Hf
-      states_real_mult%C       = B*A%C
+      states_real_mult%HfH     = B*A%HfH
+      states_real_mult%HfR     = B*A%HfR
+      states_real_mult%CH      = B*A%CH
+      states_real_mult%CR      = B*A%CR
       states_real_mult%Rm      = B*A%Rm
       states_real_mult%Rs      = B*A%Rs
-      states_real_mult%D       = B*A%D 
+      states_real_mult%DH      = B*A%DH
+      states_real_mult%DR      = B*A%DR 
    end function states_real_mult
 
    function real_states_mult(B,A)
@@ -148,13 +172,17 @@ contains
       real_states_mult%I       = B*A%I 
       real_states_mult%Qm      = B*A%Qm
       real_states_mult%Qs      = B*A%Qs
-      real_states_mult%Qf      = B*A%Qf
+      real_states_mult%QfH     = B*A%QfH
+      real_states_mult%QfR     = B*A%QfR
       real_states_mult%Hs      = B*A%Hs
-      real_states_mult%Hf      = B*A%Hf
-      real_states_mult%C       = B*A%C
+      real_states_mult%HfH     = B*A%HfH
+      real_states_mult%HfR     = B*A%HfR
+      real_states_mult%CH      = B*A%CH
+      real_states_mult%CR      = B*A%CR
       real_states_mult%Rm      = B*A%Rm
       real_states_mult%Rs      = B*A%Rs
-      real_states_mult%D       = B*A%D 
+      real_states_mult%DH      = B*A%DH
+      real_states_mult%DR      = B*A%DR 
    end function real_states_mult
 
    function states_states_mult(A,B)
@@ -166,13 +194,17 @@ contains
       states_states_mult%I       = A%I  * B%I 
       states_states_mult%Qm      = A%Qm * B%Qm
       states_states_mult%Qs      = A%Qs * B%Qs
-      states_states_mult%Qf      = A%Qf * B%Qf
+      states_states_mult%QfH     = A%QfH * B%QfH
+      states_states_mult%QfR     = A%QfR * B%QfR
       states_states_mult%Hs      = A%Hs * B%Hs
-      states_states_mult%Hf      = A%Hf * B%Hf
-      states_states_mult%C       = A%C  * B%C
+      states_states_mult%HfH     = A%HfH * B%HfH
+      states_states_mult%HfR     = A%HfR * B%HfR
+      states_states_mult%CH      = A%CH  * B%CH
+      states_states_mult%CR      = A%CR  * B%CR
       states_states_mult%Rm      = A%Rm * B%Rm
       states_states_mult%Rs      = A%Rs * B%Rs
-      states_states_mult%D       = A%D  * B%D 
+      states_states_mult%DH      = A%DH  * B%DH
+      states_states_mult%DR      = A%DR  * B%DR 
    end function states_states_mult
 
 
@@ -184,13 +216,17 @@ contains
       A%I       = r
       A%Qm      = r
       A%Qs      = r
-      A%Qf      = r
+      A%QfH     = r
+      A%QfR     = r
       A%Hs      = r
-      A%Hf      = r
-      A%C       = r
+      A%HfH     = r
+      A%HfR     = r
+      A%CH      = r
+      A%CR      = r
       A%Rm      = r
       A%Rs      = r
-      A%D       = r
+      A%DH      = r
+      A%DR      = r
    end subroutine assign_states
 
 

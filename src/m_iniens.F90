@@ -18,13 +18,17 @@ subroutine iniens(ens,enspar)
       ens(0,j)%I  = enspar(j)%I0/real(na)  ! Infected    na agegroups                 I_i
       ens(0,j)%Qm = 0.0                    ! Sick Mild                                Q_m
       ens(0,j)%Qs = 0.0                    ! Sick (Severe at home)                    Q_s
-      ens(0,j)%Qf = 0.0                    ! Sick (Severe at hospital)                Q_h
-      ens(0,j)%Hs = 0.0                    ! Sick (Severe at hospital that will die)  Q_f
-      ens(0,j)%Hf = 0.0                    ! Sick (Fatal at hospital that will die)   H_f
-      ens(0,j)%C  = 0.0                    ! Sick (Fatal at Care home that will die)  C
+      ens(0,j)%QfH = 0.0                   ! Sick (Severe at home that will die)      Q_fH
+      ens(0,j)%QfR = 0.0                   ! Sick (Severe at home that will die)      Q_fR
+      ens(0,j)%Hs = 0.0                    ! Sick (Severe at hospital)                Q_h
+      ens(0,j)%HfH = 0.0                   ! Sick (Fatal at hospital that will die)   H_fH
+      ens(0,j)%HfR = 0.0                   ! Sick (Fatal at hospital that will die)   H_fR
+      ens(0,j)%CH  = 0.0                   ! Sick (Fatal at Care home that will die)  CH
+      ens(0,j)%CR  = 0.0                   ! Sick (Fatal at Care home that will die)  CR
       ens(0,j)%Rm = 0.0                    ! Removed_mild   (recovered)               R_m
       ens(0,j)%Rs = 0.0                    ! Removed_severe (recovered)               R_s
-      ens(0,j)%D  = 0.0                    ! Removed_fatal (dead)                     D
+      ens(0,j)%DH  = 0.0                   ! Removed_fatal (dead)                     DH
+      ens(0,j)%DR  = 0.0                   ! Removed_fatal (dead)                     DR
       ens(0,j)%S  = ens(0,j)%S - ens(0,j)%E - ens(0, j)%I
       ens(0,j)=ens(0,j)*(1.0/sum(agegroup))
    enddo
