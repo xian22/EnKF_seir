@@ -149,8 +149,8 @@ subroutine f(neqq, t, y, ydot)
    ydot%I  =    (1.0/p%Tinc ) * y%E   - (1.0/p%Tinf) * y%I
    ydot%Qm =  - (1.0/p%Trecm) * y%Qm  + (1.0/p%Tinf) * dot_product(pm,y%I)
    ydot%Qs =  - (1.0/p%Thosp) * y%Qs  + (1.0/p%Tinf) * dot_product(ps,y%I)
-   ydot%QfH =  - (1.0/p%Thosp) * y%QfH  + (1.0/p%Tinf) * dot_product( pf(1:na/2),y%I(1:na/2) )
-   ydot%QfR =  - (1.0/p%Thosp) * y%QfR  + (1.0/p%Tinf) * dot_product( pf(na/2+1:na),y%I(na/2+1:na) )
+   ydot%QfH =  - (1.0/p%Thosp) * y%QfH  + (1.0/p%Tinf) * dot_product( pf(1:11),y%I(1:11) )
+   ydot%QfR =  - (1.0/p%Thosp) * y%QfR  + (1.0/p%Tinf) * dot_product( pf(12:22),y%I(12:22) )
    ydot%Hs =    (1.0/p%Thosp) * y%Qs  - (1.0/p%Trecs) * y%Hs
    ydot%HfH =    (hos/p%Thosp) * y%QfH  - (1.0/p%Tdead) * y%HfH
    ydot%HfR =    (hos/p%Thosp) * y%QfR  - (1.0/p%Tdead) * y%HfR
@@ -161,7 +161,7 @@ subroutine f(neqq, t, y, ydot)
    ydot%DH  =    (1.0/p%Tdead) * y%HfH  + (1.0/p%Tdead) * y%CH
    ydot%DR  =    (1.0/p%Tdead) * y%HfR  + (1.0/p%Tdead) * y%CR
 
-!   print *,'sum ydot and y (0.0 and 1.0)',sum(ydot),sum(y)
+  ! print *,'sum ydot and y (0.0 and 1.0)',sum(ydot),sum(y)
 
 end subroutine
  

@@ -28,7 +28,8 @@ subroutine solve(ens,enspar,j)
 
    real,    allocatable  :: rwork(:) 
    integer, allocatable  :: iwork(:)  
-
+   integer neq
+   neq=sizeof(y)/8
    dt= time/real(nt-1)
 
    lrw =max(20+16*neq, 22+9*neq+neq**2)

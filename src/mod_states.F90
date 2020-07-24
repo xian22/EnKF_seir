@@ -1,7 +1,7 @@
 module mod_states
 ! Modelstate definition for ECLIPSE
    use mod_dimensions
-   integer :: neq=3*na+9
+ !  integer :: neq=3*na+9
 
    type states
 ! Solution data
