@@ -10,7 +10,7 @@ use m_random
    logical lmeascorr
    real    rh
    logical ld,lh,lc  ! True for conditioning on deaths, hopsitalized and total number of cases
-   real relerrd, minerrd, maxerrd
+   real relerrd, minerrd, maxerrd 
    real relerrh, minerrh, maxerrh 
    real relerrc, minerrc, maxerrc, cfrac      
    integer  mode_analysis
@@ -26,8 +26,6 @@ use m_random
    integer, allocatable :: tobs(:)       ! Observation times (days from 1. March)
    character(len=1), allocatable :: cobs(:)      ! Observation times (days from 1. March)
    real, allocatable    :: D(:,:)        ! dobs+eps - y
-!   real, allocatable   :: DH(:,:)       ! dobs+eps - y
- !  real, allocatable   :: DR(:,:)       ! dobs+eps - y
    real, allocatable    :: S(:,:)        ! Ensemble of predicted observation anomalies
    real, allocatable    :: E(:,:)        ! Ensemble of measurement perturbations
    real, allocatable    :: R(:,:)        ! Measurement error covariance matrix
@@ -41,7 +39,7 @@ subroutine enkfini(time)
    real,    intent (in) :: time
    real dt
    integer i,j,k,m
-   integer iyear,imonth,iday,ideathH,ideathR,ihosp,icase,iobst
+   integer iyear,imonth,iday,ideath,ihosp,icase,iobst
    logical ex
    if (.not.lenkf) return
 
@@ -61,11 +59,8 @@ subroutine enkfini(time)
    nrobs=0
    do i=1,10000
       read(10,'(i2,tr1,i2,tr1,i4)',advance='no',end=200)iday,imonth,iyear
-      read(10,*)ideathH,ideathR,ihosp,icase
-      if (ld .and. ideathH > 0) then
-         nrobs=nrobs+1
-      endif
-      if (ld .and. ideathR > 0) then
+      read(10,*)ideath,ihosp,icase
+      if (ld .and. ideath > 0) then
          nrobs=nrobs+1
       endif
       if (lh .and. ihosp  > 0) then
@@ -88,26 +83,19 @@ subroutine enkfini(time)
 
    do i=1,nrlines
       read(10,'(i2,tr1,i2,tr1,i4)',advance='no')iday,imonth,iyear
-      read(10,*)ideathH,ideathR,ihosp,icase
-      if (ld .and. ideathH > 0) then
+      read(10,*)ideath,ihosp,icase
+      if (ld .and. ideath > 0) then
          m=m+1
          tobs(m)=real(getday(iday,imonth,iyear))
          iobs(m)=nint(real(tobs(m))/dt)
          cobs(m)='d'
-         dobs(m)=real(ideathH)
-      endif
-      if (ld .and. ideathR > 0) then
-         m=m+1
-         tobs(m)=real(getday(iday,imonth,iyear))
-         iobs(m)=nint(real(tobs(m))/dt)
-         cobs(m)='d'
-         dobs(m)=real(ideathR)
+         dobs(m)=real(ideath)
       endif
    enddo
    rewind(10)
    do i=1,nrlines
       read(10,'(i2,tr1,i2,tr1,i4)',advance='no')iday,imonth,iyear
-      read(10,*)ideathH,ideathR,ihosp,icase
+      read(10,*)ideath,ihosp,icase
       if (lh .and. ihosp > 0) then
          m=m+1
          tobs(m)=real(getday(iday,imonth,iyear))
@@ -119,7 +107,7 @@ subroutine enkfini(time)
    rewind(10)
    do i=1,nrlines
       read(10,'(i2,tr1,i2,tr1,i4)',advance='no')iday,imonth,iyear
-      read(10,*)ideathH,ideathR,ihosp,icase
+      read(10,*)ideath,ihosp,icase
       if (lc .and. icase > 0) then
          m=m+1
          tobs(m)=real(getday(iday,imonth,iyear))
@@ -148,9 +136,7 @@ subroutine enkfini(time)
    do m=1,nrobs
       select case (cobs(m))
       case ('d')
-         Rprt(m)=min(maxerrd,max(relerrd*dobs(m),minerrd))**2
-!     case ('dr')
-!        Rprt(m)=min(maxerrdr,max(relerrdr*dobs(m),minerrdr))**2 
+         Rprt(m)=min(maxerrd,max(relerrd*dobs(m),minerrd))**2 
       case ('h')
          Rprt(m)=min(maxerrh,max(relerrh*dobs(m),minerrh))**2 
       case ('c')

@@ -95,7 +95,7 @@ subroutine enkfprep(ens,enspar)
 !        S(m,:) = N*( ens(iobs(m),:)%DH - aveens%DH )
      case('d')
          D(m,:) = D(m,:)-N*ens(iobs(m),:)%DR - N*ens(iobs(m),:)%DH
-         S(m,:) = N*( ens(iobs(m),:)%DR - aveens%DR )
+         S(m,:) = N*( ens(iobs(m),:)%DH+ens(iobs(m),:)%DR - aveens%DR -aveens%DH )
       case('h')
 !        DH(m,:) = DH(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH)
          D(m,:) = D(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH+ ens(iobs(m),:)%HfR)
