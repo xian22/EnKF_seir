@@ -161,7 +161,7 @@ subroutine tecplot(ens,enspar,pri)
    call saveresult('hosp' ,'Hospitalized' ,aved(:)%H,stdd(:)%H,ensd(:,:)%H,tag,dt)
    call saveresult('deadH' ,'DeadH'       ,aved(:)%DH,stdd(:)%DH,ensd(:,:)%DH,tag,dt)
    call saveresult('deadR' ,'DeadR'       ,aved(:)%DR,stdd(:)%DR,ensd(:,:)%DR,tag,dt)
-   call saveresult('case'  ,'Cases'      ,aved(:)%C,stdd(:)%C,ensd(:,:)%C,tag,dt)
+   call saveresult('case'  ,'Cases'       ,aved(:)%C,stdd(:)%C,ensd(:,:)%C,tag,dt)
    call saveresult('active' ,'Active'     ,aved(:)%A,stdd(:)%A,ensd(:,:)%A,tag,dt)
 
  

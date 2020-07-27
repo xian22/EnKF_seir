@@ -55,6 +55,9 @@ subroutine enkfprep(ens,enspar)
    R=0.0
    do m=1,nrobs
       select case (cobs(m))
+ !     case('dh')
+ !       R(m,m)=real(nesmda)*min(maxerrdh,max(relerrdh*dobs(m),minerrdh))**2
+ !       if (lmeascorr) E(m,:)=sqrt(R(m,m))*obspertd(iobs(m),:)
       case('d')
          R(m,m)=real(nesmda)*min(maxerrd,max(relerrd*dobs(m),minerrd))**2
          if (lmeascorr) E(m,:)=sqrt(R(m,m))*obspertd(iobs(m),:)
@@ -87,17 +90,22 @@ subroutine enkfprep(ens,enspar)
 
 ! ensemble average of state for observation m
       select case (cobs(m))
-      case('d')
-         D(m,:) = D(m,:)-N*ens(iobs(m),:)%DH
-         S(m,:) = N*( ens(iobs(m),:)%DH - aveens%DH )
+!      case('dh')
+!        DH(m,:) = DH(m,:)-N*ens(iobs(m),:)%DH
+!        S(m,:) = N*( ens(iobs(m),:)%DH - aveens%DH )
+     case('d')
+         D(m,:) = D(m,:)-N*ens(iobs(m),:)%DR - N*ens(iobs(m),:)%DH
+         S(m,:) = N*( ens(iobs(m),:)%DR - aveens%DR )
       case('h')
-         D(m,:) = D(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH)
+!        DH(m,:) = DH(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH)
+         D(m,:) = D(m,:)-N*(ens(iobs(m),:)%Hs + ens(iobs(m),:)%HfH+ ens(iobs(m),:)%HfR)
          S(m,:) = N*( ens(iobs(m),:)%Hs - aveens%Hs &
-                &    +ens(iobs(m),:)%HfH - aveens%HfH )
+                &    +ens(iobs(m),:)%HfH - aveens%HfH &
+                &    +ens(iobs(m),:)%HfR - aveens%HfR )
       case('c')
          do j=1,nrens
             D(m,j) = D(m,j)- &
-                        cfrac*N*(sum(ens(iobs(m),j)%I(1:na/2)) &
+                        cfrac*N*(sum(ens(iobs(m),j)%I(1:na)) &
                                     +ens(iobs(m),j)%Qm       &
                                     +ens(iobs(m),j)%Qs       &
                                     +ens(iobs(m),j)%QfH      &
@@ -111,6 +119,7 @@ subroutine enkfprep(ens,enspar)
                                     +ens(iobs(m),j)%Rs       &
                                     +ens(iobs(m),j)%DR       &
                                     +ens(iobs(m),j)%DH        )
+                                    
 
             S(m,j) =         N*( sum(ens(iobs(m),j)%I(:)) - sum(aveens%I(:))  &
                                     +ens(iobs(m),j)%Qm         -aveens%Qm     &
@@ -124,8 +133,8 @@ subroutine enkfprep(ens,enspar)
                                     +ens(iobs(m),j)%CR         -aveens%CR     &
                                     +ens(iobs(m),j)%Rm         -aveens%Rm     &
                                     +ens(iobs(m),j)%Rs         -aveens%Rs     &
-                                    +ens(iobs(m),j)%DR         -aveens%DR     &
-                                    +ens(iobs(m),j)%DH         -aveens%DH      )
+                                    +ens(iobs(m),j)%DH         -aveens%DH      &
+                                    +ens(iobs(m),j)%DR         -aveens%DR      )
                enddo
       case default
          stop 'Measurement type not found'

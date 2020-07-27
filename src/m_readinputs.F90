@@ -38,7 +38,9 @@ subroutine readinputs()
       read(10,*)mode_analysis       ;    print '(a,i2)',       'Analysis mode of EnKF      :',mode_analysis
       read(10,*)nesmda              ;    print '(a,i2)',       'Number of ESMDA steps      :',nesmda
       read(10,*)ld, relerrd, minerrd, maxerrd 
-               print '(a,l1,3f10.2)','D conditioning, relerr, minerr, maxerr        :',ld, relerrd, minerrd, maxerrd
+               print '(a,l1,3f10.2)','DH + DR conditioning, relerr, minerr, maxerr   :',ld, relerrd, minerrd, maxerrd
+!     read(10,*)ldr, relerrdr, minerrdr, maxerrdr 
+!              print '(a,l1,3f10.2)','DR conditioning, relerr, minerr, maxerr        :',ldr, relerrdr, minerrdr, maxerrdr
       read(10,*)lh, relerrh, minerrh, maxerrh 
                print '(a,l1,3f10.2)','H conditioning, relerr, minerr, maxerr        :',lh, relerrh, minerrh, maxerrh
       read(10,*)lc, relerrc, minerrc, maxerrc , cfrac

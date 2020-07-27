@@ -7,6 +7,7 @@ module mod_diag
       real H        ! Hs + HfH + HfR 
       real C        ! CH + CR
       real R        ! Total Recovered
+!     real D        ! DeathsH + DeathsR
       real DH       ! Deaths H
       real DR       ! Deaths R
       real A        ! Active cases 
@@ -49,6 +50,7 @@ contains
       sqrt_diag%H       = sqrt(A%H+eps)
       sqrt_diag%R       = sqrt(A%R+eps)
       sqrt_diag%C       = sqrt(A%C+eps)
+!     sqrt_diag%D       = sqrt(A%D+eps)
       sqrt_diag%DH      = sqrt(A%DH+eps)
       sqrt_diag%DR      = sqrt(A%DR+eps)
       sqrt_diag%A       = sqrt(A%A+eps)
@@ -61,11 +63,12 @@ contains
       add_diag%S       = A%S  + B%S 
       add_diag%E       = A%E  + B%E
       add_diag%I       = A%I  + B%I
-      add_diag%H       = A%H + B%H
-      add_diag%R       = A%R + B%R
+      add_diag%H       = A%H  + B%H
+      add_diag%R       = A%R  + B%R
       add_diag%C       = A%C  + B%C
-      add_diag%DH      = A%DH  + B%DH
-      add_diag%DR      = A%DR  + B%DR
+!     add_diag%D       = A%D  + B%D
+      add_diag%DH      = A%DH + B%DH
+      add_diag%DR      = A%DR + B%DR
       add_diag%A       = A%A  + B%A
    end function add_diag
 
@@ -79,8 +82,9 @@ contains
       subtract_diag%H       = A%H  - B%H
       subtract_diag%R       = A%R  - B%R
       subtract_diag%C       = A%C  - B%C
-      subtract_diag%DH      = A%DH  - B%DH
-      subtract_diag%DR      = A%DR  - B%DR
+!     subtract_diag%D       = A%D  - B%D
+      subtract_diag%DH      = A%DH - B%DH
+      subtract_diag%DR      = A%DR - B%DR
       subtract_diag%A       = A%A  - B%A
    end function subtract_diag
 
@@ -94,6 +98,7 @@ contains
       diag_real_mult%H       = B*A%H
       diag_real_mult%R       = B*A%R
       diag_real_mult%C       = B*A%C
+!     diag_real_mult%D       = B*A%D
       diag_real_mult%DH      = B*A%DH
       diag_real_mult%DR      = B*A%DR 
       diag_real_mult%A       = B*A%A 
@@ -109,6 +114,7 @@ contains
       real_diag_mult%H       = B*A%H
       real_diag_mult%R       = B*A%R
       real_diag_mult%C       = B*A%C
+!     real_diag_mult%D       = B*A%D
       real_diag_mult%DH      = B*A%DH 
       real_diag_mult%DR      = B*A%DR 
       real_diag_mult%A       = B*A%A 
@@ -121,11 +127,12 @@ contains
       diag_diag_mult%S       = A%S  * B%S 
       diag_diag_mult%E       = A%E  * B%E 
       diag_diag_mult%I       = A%I  * B%I 
-      diag_diag_mult%H       = A%H *  B%H
-      diag_diag_mult%R       = A%R *  B%R
-      diag_diag_mult%C       = A%C  * B%C  
-      diag_diag_mult%DH      = A%DH  * B%DH
-      diag_diag_mult%DR      = A%DR  * B%DR 
+      diag_diag_mult%H       = A%H  * B%H
+      diag_diag_mult%R       = A%R  * B%R
+      diag_diag_mult%C       = A%C  * B%C
+!     diag_diag_mult%D       = A%D  * B%D  
+      diag_diag_mult%DH      = A%DH * B%DH
+      diag_diag_mult%DR      = A%DR * B%DR 
       diag_diag_mult%A       = A%A  * B%A 
    end function diag_diag_mult
 
@@ -139,6 +146,7 @@ contains
       A%H       = r
       A%R       = r
       A%C       = r
+!     A%D       = r
       A%DH      = r
       A%DR      = r
       A%A       = r
